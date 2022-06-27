@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 import './suggestionCard.css';
 
 class suggestionCard extends Component {
@@ -8,8 +9,10 @@ class suggestionCard extends Component {
         return (
             <React.Fragment>
                 <div className="card">
-                    <div onClick={() => this.props.handleClick(id)} className="card-body">
-                        {symbol}, {instrument_name}, {exchange}
+                    <div className="card-body">
+                        <Link onClick={() => this.props.handleClick(id)} to="/showdetails">
+                            {symbol}, {instrument_name}, {exchange}
+                        </Link>
                     </div>
                 </div>
             </React.Fragment>

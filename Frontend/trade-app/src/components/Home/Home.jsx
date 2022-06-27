@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 export default class Home extends Component {
     state = {
         suggestions : [],
+        searchInp: ""
     }
 
     getCompanySymbol = async(cName) => {
@@ -20,21 +21,21 @@ export default class Home extends Component {
         return data;
     }
 
-    handleSubmit = async (e) => {
-        e.preventDefault();
-        const cName = e.target.searchBox.value;
+    handleSubmit = () => {
+        this.props.setSpinner();
         
-        const data = await this.getCompanySymbol(cName);
+        const cName = this.state.searchInp;
         
-        const result = await axios.get(`http://localhost:3000/getScrapedData/?cName=${data[0].symbol && data[0].symbol}`)
-
-        console.log(result.data);
-        e.target.searchBtn.click();
+        this.getCompanySymbol(cName)
+        .then(cSymbols => {
+            this.props.getScrapedData(cSymbols[0].symbol)
+        });
     }
 
     handleSearchBoxChange = async (e) => {
         e.persist();
-        
+        this.setState({searchInp : e.target.value})
+
         const cName = e.target.value;
         
         const data = await this.getCompanySymbol(cName);
@@ -43,26 +44,25 @@ export default class Home extends Component {
     }
 
     handleSuggestionClick = async(id) => {
+        this.props.setSpinner();
         const suggestion = await this.state.suggestions[id];
         
         const cName = suggestion.symbol;
 
-        const data = await this.getCompanySymbol(cName);
+        const cSymbol = await this.getCompanySymbol(cName);
 
-        const result = await axios.get(`http://localhost:3000/getScrapedData/?cName=${data[0].symbol && data[0].symbol}`)
-
-        console.log(result.data);        
+        await this.props.getScrapedData(cSymbol[0].symbol);
     }
 
     render() {
     return (
         <React.Fragment>
         <div className="container">
-            <form className='large-font' onSubmit={this.handleSubmit}>
+            <form className='large-font'>
                 <label htmlFor="searchInp" className="form-label">Search stocks</label>
                 <input type="text" id="searchInp" name="searchBox" className="form-control" onChange={this.handleSearchBoxChange}/>
                 <Link to="/showdetails">
-                    <button type="submit" name="searchBtn" className="btn btn-secondary">Search</button>
+                    <button type="submit" onClick={this.handleSubmit} name="searchBtn" className="btn btn-secondary">Search</button>
                 </Link>
                 <div className="form-text" >
                     Search your fav stock and keep an eye on it

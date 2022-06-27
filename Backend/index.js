@@ -120,7 +120,7 @@ app.post("/subscribe", (req, res) => {
 })
 
 app.get('/getScrapedData', (req, response) => {
-    console.log(req.query.cName);
+    // console.log(req.query.cName);
 
     let scrapingUrl = `https://www.screener.in/company/${req.query.cName}`;
 
@@ -180,7 +180,6 @@ app.get('/getScrapedData', (req, response) => {
                     "FaceValue" : FaceValue.text()
                 })
                 response.send(data)
-                console.log('sent');
             }
         }
         catch (er)

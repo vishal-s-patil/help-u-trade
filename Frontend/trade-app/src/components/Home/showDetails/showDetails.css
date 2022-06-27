@@ -3,9 +3,15 @@
 }
 
 .showDetailsContainer {
-    font-size: 3rem;
+    font-size: 2rem;
 }
 
 .col{
-    margin: auto;
+    border: 2px solid red;
+    margin: 10px;
+    padding: 10px;
+}
+
+.border {
+    border-radius: 10px;
 }
