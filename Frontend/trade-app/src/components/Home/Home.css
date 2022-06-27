@@ -1,0 +1,17 @@
+.container {
+    /* display: flex;
+    flex-direction: column; */
+    position: relative;
+    top: 40vh;
+}
+
+.btn {
+    margin: 10px;
+    margin-left: 0px;
+    height: 3rem;
+    width: 10%;
+}
+
+.large-font {
+    font-size: 2rem;
+}
