@@ -4,10 +4,12 @@ import SuggestionCard from '../suggestionCard/suggestionCard.jsx';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+let cancelToken;
+
 export default class Home extends Component {
     state = {
         suggestions : [],
-        searchInp: ""
+        searchInp: "",
     }
 
     getCompanySymbol = async(cName) => {
@@ -35,10 +37,22 @@ export default class Home extends Component {
     handleSearchBoxChange = async (e) => {
         e.persist();
         this.setState({searchInp : e.target.value})
-
         const cName = e.target.value;
+
+        if(typeof cancelToken != typeof undefined) {
+            cancelToken.cancel('cancel');
+        }
+
+        cancelToken = axios.CancelToken.source();
         
-        const data = await this.getCompanySymbol(cName);
+        const res = await axios.get(`http://localhost:3000/getCompanyName?keyword=${cName}`, {cancelToken : cancelToken.token});
+        let i = 0;
+        console.log(res);
+        const data = res.data.map(ele => {
+            ele.id = i
+            i++;
+            return ele;
+        })
 
         await this.setState({suggestions : data})
     }
