@@ -23,13 +23,10 @@ class Subscribe extends Component {
         }
         else {
             this.setState({modalFlag : true})
+            e.target.modalBtn.click();
         }
 
         e.target.email.value = "";
-    }
-
-    handleClick = () => {
-        console.log('clk');
     }
 
     handleClose = () => {
@@ -56,8 +53,8 @@ class Subscribe extends Component {
                             <input type="text" name="email" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" />
                         </div>
                         <button type='submit' name='btn' className='btn btn-primary'>Subscribe</button>
-                        <button className='btn btn-primary' variant="primary" onClick={this.handleShow}>
-                            modal
+                        <button name='modalBtn' style={{position : "absolute", top:'-600px'}} onClick={this.handleShow}>
+                            
                         </button>
                         <Modal show={this.state.show} handleClose={this.handleClose}>
                         </Modal>

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const axios = require('axios');
+var nodemailer = require('nodemailer');
 const { json } = require('express');
 const mongoClient = require('mongodb').MongoClient;
 const rp = require('request-promise');
@@ -77,10 +78,43 @@ app.post("/contactData", (req, res) => {
             client.close();
         })
     })
-})
+}) 
+
+function SendMail(myGmail)
+{
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: 'vspatil8123@gmail.com',
+      pass: 'xqqhxthncggkurbn'
+    }
+  });
+
+  var mailOptions = {
+    from: 'vspatil8123@gmail.com',
+    to: myGmail,
+    subject: 'WELCOME TO STOCK WORLD',
+    text: `YOU ARE SUCCESSFULLY SUSCRIBED TO STOCK MARKET.
+    "When it comes to investing and stock trading, news and reaction time can make or break an investor. This is the best site for up-to-date financial news."
+    THANK YOU FOR SUBSCRIBING.
+    `
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
 
 app.post("/subscribe", (req, res) => {
-
+    SendMail(req.body.email)
     const URL = "mongodb://localhost:27017/helputrade";
     mongoClient.connect(URL, async (err, client) => {
         if (err) {
